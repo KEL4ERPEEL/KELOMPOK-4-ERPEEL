@@ -1,71 +1,73 @@
-@extends('layouts.guest')
+@extends('layouts.app')
 
 @section('content')
-<!-- Outer Row -->
-<div class="row justify-content-center">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Login') }}</div> {{--Mengarahkan user ke menu login apa bila ingin merefresh page--}}
 
-    <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card-body">
+                    <form method="POST" action="{{ route('login') }}">{{--Mengarahkan user ke menu login apa bila ingin merefresh page yang membedakan dengan yang sebelumnya adalah penyederhanaan saja namun fungsinya tetap sama, method post berguna untuk mengirimkan data dari form ke database untuk diautentikasi --}}
+                        @csrf {{-- csrf pada laravel bergungsi untuk melindungi website yang dibuat dari csrf attack, csrf secara otomatis men-generate CSRF token untuk setiap user yang mengakses website, biasanya digunakan untuk memverifikasi user yang meminta token/login--}}
 
-        <div class="card o-hidden border-0 shadow-lg my-4">
-            <div class="card-body p-0">
-                <!-- Nested Row within Card Body -->
-                <div class="row">
-                    <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                    <div class="col-lg-6">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h3 text-primary font-weight-bolder mb-1">{{ __('NOESATRIP') }}</h1>
-                                <h1 class="h4 text-gray-900 mb-4">{{ __('Selamat Datang!') }}</h1>
-                            </div>
-                            <form action="{{ route('login') }}" method="post" class="user">
-                                @csrf
+                        <div class="row mb-3">
+                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
 
-                                <div class="form-group">
-                                    <input type="email" name="email" value="{{ old('email') }}" style="font-size: medium;" class="form-control form-control-user @error('email') is-invalid @enderror" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="{{ __('Email Address') }}" required autofocus>
-                                </div>
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus> {{-- pada baris berikut user diminta untuk menginputkan email yang digunakan user setelah registrasi pada view registrasi, lalu akan divalidasikan apakah karakter yang dimasukkan adalah email atau tidak. Pada Value apabila user sudah pernah login sebelumnya maka yang akan tampil pada form adalah email yang pernah di inputkan--}}
+
                                 @error('email')
-                                <div class="form-group custom-control">
-                                    <label class="">{{ $message }}</label>
-                                </div>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span> {{-- pada baris berikut merupakan feedback dari email yang salah. Feed back yang akan muncul adalah berupa alert dan akan menampilkan message yang telah diatur sebelumya--}}
                                 @enderror
-
-                                <div class="form-group">
-                                    <input type="password" name="password" style="font-size: medium;" class="form-control form-control-user @error('password') is-invalid @enderror" id="exampleInputPassword" placeholder="{{ __('Password') }}" required>
-                                </div>
-                                @error('password')
-                                <div class="form-group custom-control">
-                                    <label class="">{{ $message }}</label>
-                                </div>
-                                @enderror
-
-                                <div class="form-group">
-                                    <div class="custom-control custom-checkbox small">
-                                        <input type="checkbox" name="remember" class="custom-control-input" id="customCheck">
-                                        <label class="custom-control-label" for="customCheck">{{ __('Remember Me') }}</label>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-user btn-block">
-                                    {{ __('Login') }}
-                                </button>
-                            </form>
-                            <hr>
-                            @if (Route::has('password.request'))
-                            <div class="text-center">
-                                <a class="small" href="{{ route('password.request') }}">{{ __('Forgot Password?') }}</a>
                             </div>
-                            @endif
-                            @if (Route::has('register'))
-                            <div class="text-center">
-                                <a class="small" href="{{ route('register') }}">{{ __('Create New Account!') }}</a>
-                            </div>
-                            @endif
                         </div>
-                    </div>
+
+                        <div class="row mb-3">
+                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label> {{--pada baris berikut merupakan form untuk input password --}}
+
+                            <div class="col-md-6">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password"> {{-- pada baris berikut merupakan form penginput password oleh user, apa bila error maka akan menampilkan alert seperti source code dibawah dengan message yang telah diatur --}}
+
+                                @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6 offset-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+
+                                    <label class="form-check-label" for="remember">
+                                        {{ __('Remember Me') }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>{{-- baris berikut merupakan form check apa bila user menginginkan website untuk mengingat profil user yang sebelumnya sudah pernah login--}}
+
+                        <div class="row mb-0">
+                            <div class="col-md-8 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Login') }}
+                                </button> {{-- baris berikut merupakan button submit apa bila user telah menyelesaikan form login yang nantinya akan autentikasi  --}}
+
+                                @if (Route::has('password.request'))
+                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                        {{ __('Forgot Your Password?') }}
+                                    </a> {{-- baris berikut merupakan opsi untuk user apa bila user melupakan user yang pernah dibuat dan ingin mereset password --}}
+                                @endif
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
 @endsection

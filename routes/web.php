@@ -1,15 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AkunController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PemainController;
-use App\Http\Controllers\AsistenController;
-use App\Http\Controllers\PelatihController;
-use App\Http\Controllers\ProfileController;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,18 +13,11 @@ use App\Http\Controllers\ProfileController;
 |
 */
 
+Route::get('/', function () {
+    return view('dashboard');
+});
+
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
-Route::middleware('auth')->group(function () {
-    
-    Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
-    
-    Route::resource('akun', AkunController::class);
-    Route::resource('pelatih', PelatihController::class);
-    Route::resource('asisten', AsistenController::class);
-    Route::resource('pemain', PemainController::class);
-    
-});
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard']);

@@ -1,24 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card-body login-card-body">
-    <p class="login-box-msg">{{ __('Verify Your Email Address') }}</p>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Verify Your Email Address') }}</div>
 
-    @if (session('resent'))
-    <div class="alert alert-success" role="alert">
-        {{ __('A fresh verification link has been sent to your email address.') }}
-    </div>
-    @endif
+                <div class="card-body">
+                    @if (session('resent'))
+                        <div class="alert alert-success" role="alert">
+                            {{ __('A fresh verification link has been sent to your email address.') }}
+                        </div>
+                    @endif
 
-    {{ __('Before proceeding, please check your email for a verification link.') }}
-    {{ __('If you did not receive the email') }},
-    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
-        @csrf
-        <div class="row">
-            <div class="col-12">
-                <button type="submit" class="btn btn-block" style="background-color: #3252DF; color: #fff;">{{ __('click here to request another') }}</button>
+                    {{ __('Before proceeding, please check your email for a verification link.') }}
+                    {{ __('If you did not receive the email') }},
+                    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
+                    </form>
+                </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 @endsection
